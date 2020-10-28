@@ -5,10 +5,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Component
-public class UserDao {
+public class UserDaoService {
 
     static List<User> userList = new ArrayList<User>();
 
@@ -31,12 +32,26 @@ public class UserDao {
         return userTemp;
     }
 
-    public User addUser(User user){
+    public User addUser(User user) {
         int id = 0;
-        if(user.getId() == null)
-            id = userList.size()+1;
+        if (user.getId() == null)
+            id = userList.size() + 1;
         user.setId(id);
         userList.add(user);
         return user;
     }
+
+    public boolean deleteUser(int id) {
+        boolean isDeleted = false;
+        Iterator<User> userListItr = userList.iterator();
+        while (userListItr.hasNext()) {
+            User user = userListItr.next();
+            if (user.getId().equals(id)) {
+                userListItr.remove();
+                isDeleted = true;
+            }
+        }
+        return isDeleted;
+    }
+
 }
