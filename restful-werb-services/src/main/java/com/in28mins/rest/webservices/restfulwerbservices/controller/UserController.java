@@ -1,7 +1,9 @@
 package com.in28mins.rest.webservices.restfulwerbservices.controller;
 
 import com.in28mins.rest.webservices.restfulwerbservices.dao.UserDao;
+import com.in28mins.rest.webservices.restfulwerbservices.exception.UserNotFoundException;
 import com.in28mins.rest.webservices.restfulwerbservices.models.User;
+import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +25,11 @@ public class UserController {
 
     @GetMapping(path = "/user/{id}")
     public User findUser(@PathVariable String id){
-        return userDao.getUser(Integer.parseInt(id));
+        User user = userDao.getUser(Integer.parseInt(id));
+        if(user == null){
+            throw new UserNotFoundException("User is not found");
+        }
+        return user;
     }
 
     @PostMapping(path = "user")
