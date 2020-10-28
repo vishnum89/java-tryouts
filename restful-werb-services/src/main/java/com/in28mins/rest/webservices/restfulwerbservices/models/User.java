@@ -1,13 +1,19 @@
 package com.in28mins.rest.webservices.restfulwerbservices.models;
 
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class User {
 
     private Integer id;
 
+    @Size(min = 2 ,message = "Name should be more tha 2 in length")
     private String name;
 
+    @Past
     private Date birthDate;
 
 
