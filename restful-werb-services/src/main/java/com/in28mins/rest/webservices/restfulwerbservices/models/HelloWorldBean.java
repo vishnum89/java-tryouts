@@ -1,11 +1,11 @@
-package com.in28mins.rest.webservices.restfulwerbservices;
+package com.in28mins.rest.webservices.restfulwerbservices.models;
 
 
 public class HelloWorldBean {
 
     private String message;
 
-    HelloWorldBean(String msg){
+    public HelloWorldBean(String msg){
         this.message = msg;
     }
 
