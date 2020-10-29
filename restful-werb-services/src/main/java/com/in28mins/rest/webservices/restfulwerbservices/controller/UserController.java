@@ -4,6 +4,10 @@ import com.in28mins.rest.webservices.restfulwerbservices.dao.UserDaoService;
 import com.in28mins.rest.webservices.restfulwerbservices.exception.UserNotFoundException;
 import com.in28mins.rest.webservices.restfulwerbservices.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,12 +28,16 @@ public class UserController {
     }
 
     @GetMapping(path = "/user/{id}")
-    public User findUser(@PathVariable String id) {
+    public EntityModel<User> findUser(@PathVariable String id) {
         User user = userDao.getUser(Integer.parseInt(id));
         if (user == null) {
             throw new UserNotFoundException("User is not found");
         }
-        return user;
+
+        EntityModel<User> entityModel = EntityModel.of(user);
+        WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getUserList());
+        entityModel.add(linkTo.withRel("all-users"));
+        return entityModel;
     }
 
     @PostMapping(path = "/user")
