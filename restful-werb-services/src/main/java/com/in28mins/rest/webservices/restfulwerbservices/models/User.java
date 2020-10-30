@@ -2,12 +2,18 @@ package com.in28mins.rest.webservices.restfulwerbservices.models;
 
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue
     private Integer id;
 
     @Size(min = 2 ,message = "Name should be more tha 2 in length")
