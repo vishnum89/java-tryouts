@@ -5,9 +5,11 @@ import org.springframework.validation.annotation.Validated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class User {
@@ -22,6 +24,9 @@ public class User {
     @Past
     private Date birthDate;
 
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> postList;
 
     public User() {
     }
@@ -54,6 +59,14 @@ public class User {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public List<Post> getPostList() {
+        return postList;
+    }
+
+    public void setPostList(List<Post> postList) {
+        this.postList = postList;
     }
 
     @Override
