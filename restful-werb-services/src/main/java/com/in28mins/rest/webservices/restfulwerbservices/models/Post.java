@@ -1,5 +1,7 @@
 package com.in28mins.rest.webservices.restfulwerbservices.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -12,6 +14,7 @@ public class Post {
     private int postID;
     private String postMessage;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private User user;
 
     public int getPostID() {

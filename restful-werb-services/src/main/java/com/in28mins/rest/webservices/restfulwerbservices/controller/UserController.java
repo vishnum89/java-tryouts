@@ -3,6 +3,7 @@ package com.in28mins.rest.webservices.restfulwerbservices.controller;
 import com.in28mins.rest.webservices.restfulwerbservices.dao.UserDaoService;
 import com.in28mins.rest.webservices.restfulwerbservices.dao.UserRepo;
 import com.in28mins.rest.webservices.restfulwerbservices.exception.UserNotFoundException;
+import com.in28mins.rest.webservices.restfulwerbservices.models.Post;
 import com.in28mins.rest.webservices.restfulwerbservices.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -63,6 +64,16 @@ public class UserController {
             userRepo.deleteById(Integer.parseInt(id));
         } catch (Exception e) {
             throw new UserNotFoundException("User not found!!");
+        }
+    }
+    @GetMapping(path = "/user/{id}/posts")
+    public List<Post> getAllPostsByUserId(@PathVariable String id){
+
+        Optional<User> userOptional =  userRepo.findById(Integer.parseInt(id));
+        if(userOptional.isPresent()){
+            return userOptional.get().getPostList();
+        }else{
+            throw new UserNotFoundException("Not Found!!");
         }
     }
 }
