@@ -1,5 +1,6 @@
 package com.in28mins.rest.webservices.restfulwerbservices.controller;
 
+import com.in28mins.rest.webservices.restfulwerbservices.dao.PostRepo;
 import com.in28mins.rest.webservices.restfulwerbservices.dao.UserDaoService;
 import com.in28mins.rest.webservices.restfulwerbservices.dao.UserRepo;
 import com.in28mins.rest.webservices.restfulwerbservices.exception.UserNotFoundException;
@@ -29,6 +30,9 @@ public class UserController {
 
     @Autowired
     UserRepo userRepo;
+
+    @Autowired
+    PostRepo postRepo;
 
     @GetMapping(path = "/user")
     public List<User> getUserList() {
@@ -74,6 +78,20 @@ public class UserController {
             return userOptional.get().getPostList();
         }else{
             throw new UserNotFoundException("Not Found!!");
+        }
+    }
+
+    @PostMapping(path = "/user/{id}/posts")
+    public ResponseEntity<Object> addPost(@Valid @RequestBody Post post , @PathVariable("id") String userId) {
+        Optional<User> userOpt = userRepo.findById(Integer.parseInt(userId));
+        post.setUser(userOpt.get());
+        if (!userOpt.isPresent()) {
+            throw new UserNotFoundException("User is not found");
+        }else{
+            Post savedPost = postRepo.save(post);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedPost.getPostID()).toUri();
+            return ResponseEntity.created(location).build();
+
         }
     }
 }
